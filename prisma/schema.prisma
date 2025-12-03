@@ -39,6 +39,7 @@ model Interface {
   interfaceGroup   InterfaceGroup?     @relation(fields: [interfaceGroupId], references: [id])
   tags             InterfaceTag[]
   elements         InterfaceElement[]
+  interfaceEvents  InterfaceEvent[]
   createdAt        DateTime            @default(now())
   updatedAt        DateTime            @updatedAt
 
@@ -95,6 +96,7 @@ model Event {
   displayName           String
   source                EventSource
   interfaceElementEvents InterfaceElementEvent[]
+  interfaceEvents       InterfaceEvent[]
 
   @@map("events")
 }
@@ -112,5 +114,20 @@ model InterfaceElementEvent {
   @@unique([interfaceElementId, eventId])
   @@map("interfaceElementEvents")
 }
+
+model InterfaceEvent {
+  id          Int      @id @default(autoincrement())
+  interfaceId Int
+  eventId     Int
+  isPrimary   Boolean  @default(false)
+  notes       String?
+
+  interface   Interface @relation(fields: [interfaceId], references: [id])
+  event       Event     @relation(fields: [eventId], references: [id])
+
+  @@unique([interfaceId, eventId])
+  @@map("interfaceEvents")
+}
+
 
 

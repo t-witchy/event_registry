@@ -95,6 +95,11 @@ export async function GET(req: NextRequest) {
           },
         },
       },
+      interfaceEvents: {
+        include: {
+          event: true,
+        },
+      },
     },
     orderBy: {
       updatedAt: "desc",
@@ -116,6 +121,9 @@ export async function GET(req: NextRequest) {
   const payload = interfaces.map((iface) => {
     const elementCount = iface.elements.length;
     const distinctEventIds = new Set<number>();
+
+    iface.interfaceEvents.forEach((ie) => distinctEventIds.add(ie.eventId));
+
     iface.elements.forEach((el) =>
       el.events.forEach((e) => distinctEventIds.add(e.eventId)),
     );
@@ -149,6 +157,7 @@ export async function POST(req: NextRequest) {
       imageUrl,
       interfaceGroupId,
       tagIds,
+      elements,
     } = body as {
       name?: string;
       platform?: Platform;
@@ -157,6 +166,23 @@ export async function POST(req: NextRequest) {
       imageUrl?: string;
       interfaceGroupId?: number | null;
       tagIds?: number[];
+      interfaceEvents?: Array<{
+        canonicalName?: string;
+        isPrimary?: boolean;
+        notes?: string;
+      }>;
+      elements?: Array<{
+        name?: string;
+        description?: string;
+        displayLabel?: string;
+        position?: number;
+        notes?: string;
+        events?: Array<{
+          canonicalName?: string;
+          isPrimary?: boolean;
+          notes?: string;
+        }>;
+      }>;
     };
 
     if (!name || !platform) {
@@ -186,6 +212,79 @@ export async function POST(req: NextRequest) {
           })),
           skipDuplicates: true,
         });
+      }
+
+      if (body.interfaceEvents && body.interfaceEvents.length > 0) {
+        for (const ev of body.interfaceEvents) {
+          if (!ev.canonicalName) continue;
+
+          const eventRow = await tx.event.upsert({
+            where: { canonicalName: ev.canonicalName },
+            create: {
+              canonicalName: ev.canonicalName,
+              displayName: ev.canonicalName,
+              source: "V2_STRONG",
+            },
+            update: {},
+          });
+
+          await tx.interfaceEvent.create({
+            data: {
+              interfaceId: iface.id,
+              eventId: eventRow.id,
+              isPrimary: ev.isPrimary ?? false,
+              notes: ev.notes,
+            },
+          });
+        }
+      }
+
+      if (elements && elements.length > 0) {
+        for (const el of elements) {
+          if (!el.name) continue;
+
+          const element = await tx.element.create({
+            data: {
+              name: el.name,
+              description: el.description,
+            },
+          });
+
+          const interfaceElement = await tx.interfaceElement.create({
+            data: {
+              interfaceId: iface.id,
+              elementId: element.id,
+              displayLabel: el.displayLabel,
+              position: el.position,
+              notes: el.notes,
+            },
+          });
+
+          if (el.events && el.events.length > 0) {
+            for (const ev of el.events) {
+              if (!ev.canonicalName) continue;
+
+              const eventRow = await tx.event.upsert({
+                where: { canonicalName: ev.canonicalName },
+                create: {
+                  canonicalName: ev.canonicalName,
+                  displayName: ev.canonicalName,
+                  source: "V2_STRONG",
+                },
+                update: {},
+              });
+
+              await tx.interfaceElementEvent.create({
+                data: {
+                  interfaceElementId: interfaceElement.id,
+                  eventId: eventRow.id,
+                  isPrimary: ev.isPrimary ?? false,
+                  notes: ev.notes,
+                },
+              });
+            }
+          }
+        }
       }
 
       return iface;
