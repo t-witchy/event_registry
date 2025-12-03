@@ -12,7 +12,6 @@ export async function GET(_req: NextRequest, { params }: Params) {
   const numericId = Number(id);
 
   const event = getEvent(numericId);
-  const event = getEvent(id);
 
   if (!event) {
     return NextResponse.json({ error: "Event not found" }, { status: 404 });
