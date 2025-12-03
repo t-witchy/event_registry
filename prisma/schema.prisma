@@ -129,5 +129,15 @@ model InterfaceEvent {
   @@map("interfaceEvents")
 }
 
+model ContextExtension {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  deprecated  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@map("contextExtensions")
+}
+
 
 

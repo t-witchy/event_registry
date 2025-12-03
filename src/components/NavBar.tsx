@@ -34,7 +34,7 @@ const navigation: NavItem[] = [
   { name: "Events", href: "/" },
   { name: "Metrics", href: "/metrics" },
   { name: "Interfaces", href: "/interfaces" },
-  { name: "Calendar", href: "#" },
+  { name: "Context Extensions", href: "/context-extensions" },
 ];
 
 const userNavigation: UserNavItem[] = [
