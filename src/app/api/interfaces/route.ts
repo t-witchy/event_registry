@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import type { Platform } from "@prisma/client";
+import type { Platform, Prisma } from "@prisma/client";
 
 function parseStringArray(param: string | string[] | null): string[] {
   if (!param) return [];
@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
   const groupId = groupIdParam ? Number(groupIdParam) : undefined;
   const eventId = eventIdParam ? Number(eventIdParam) : undefined;
 
-  const where: Parameters<typeof prisma.interface.findMany>[0]["where"] = {};
+  const where: Prisma.InterfaceWhereInput = {};
 
   if (q) {
     where.OR = [
