@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import NavBar from "@/components/NavBar";
 import Link from "next/link";
-import type { Platform } from "@prisma/client";
+import type { Platform, Prisma } from "@prisma/client";
 
 type SearchParams = { [key: string]: string | string[] | undefined };
 
@@ -36,7 +36,7 @@ export default async function InterfacesPage({
 
   const groupId = groupIdParam ? Number(groupIdParam) : undefined;
 
-  const where: Parameters<typeof prisma.interface.findMany>[0]["where"] = {};
+  const where: Prisma.InterfaceWhereInput = {};
 
   if (q) {
     where.OR = [
