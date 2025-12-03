@@ -86,81 +86,83 @@ export default function MetricsPage() {
               <div className="mt-8 flow-root">
                 <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                   <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                    <table className="relative min-w-full divide-y divide-gray-300 dark:divide-white/15">
-                      <thead>
-                        <tr>
-                          <th
-                            scope="col"
-                            className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white"
-                          >
-                            Name
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
-                          >
-                            Description
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
-                          >
-                            Filters
-                          </th>
-                          <th
-                            scope="col"
-                            className="py-3.5 pr-4 pl-3 sm:pr-0"
-                          >
-                            <span className="sr-only">Edit</span>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-200 dark:divide-white/10">
-                        {metrics.map((metric) => (
-                          <tr key={metric.id}>
-                            <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0 dark:text-white">
-                              {metric.name}
-                            </td>
-                            <td className="px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
-                              {metric.description}
-                            </td>
-                            <td className="px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
-                              {metric.eventPropertyFilters.map(
-                                (filter, index) => (
-                                  <div key={`${filter.eventPropertyName}-${index}`}>
-                                    {index > 0 && (
-                                      <span className="mr-1 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
-                                        AND
-                                      </span>
-                                    )}
-                                    <span className="font-mono text-gray-900 dark:text-gray-50">
-                                      {filter.eventPropertyName}
-                                    </span>{" "}
-                                    <span>
-                                      {formatOperator(
-                                        filter.eventPropertyFilterOperator,
-                                      )}
-                                    </span>{" "}
-                                    <span className="font-mono text-gray-900 dark:text-gray-50">
-                                      {renderValue(filter.eventPropertyFilterValue)}
-                                    </span>
-                                  </div>
-                                ),
-                              )}
-                            </td>
-                            <td className="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
-                              <Link
-                                href={`/metrics/${metric.id}`}
-                                className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
-                              >
-                                Edit
-                                <span className="sr-only">, {metric.name}</span>
-                              </Link>
-                            </td>
+                    <div className="overflow-hidden shadow-sm outline-1 outline-black/5 sm:rounded-lg dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
+                      <table className="relative min-w-full divide-y divide-gray-300 dark:divide-white/15">
+                        <thead className="bg-gray-50 dark:bg-gray-800/75">
+                          <tr>
+                            <th
+                              scope="col"
+                              className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-6 dark:text-gray-200"
+                            >
+                              Name
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200"
+                            >
+                              Description
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200"
+                            >
+                              Filters
+                            </th>
+                            <th
+                              scope="col"
+                              className="py-3.5 pr-4 pl-3 sm:pr-6"
+                            >
+                              <span className="sr-only">Edit</span>
+                            </th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200 bg-white dark:divide-white/10 dark:bg-gray-800/50">
+                          {metrics.map((metric) => (
+                            <tr key={metric.id}>
+                              <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6 dark:text-white">
+                                {metric.name}
+                              </td>
+                              <td className="px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+                                {metric.description}
+                              </td>
+                              <td className="px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+                                {metric.eventPropertyFilters.map(
+                                  (filter, index) => (
+                                    <div key={`${filter.eventPropertyName}-${index}`}>
+                                      {index > 0 && (
+                                        <span className="mr-1 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+                                          AND
+                                        </span>
+                                      )}
+                                      <span className="font-mono text-gray-900 dark:text-gray-50">
+                                        {filter.eventPropertyName}
+                                      </span>{" "}
+                                      <span>
+                                        {formatOperator(
+                                          filter.eventPropertyFilterOperator,
+                                        )}
+                                      </span>{" "}
+                                      <span className="font-mono text-gray-900 dark:text-gray-50">
+                                        {renderValue(filter.eventPropertyFilterValue)}
+                                      </span>
+                                    </div>
+                                  ),
+                                )}
+                              </td>
+                              <td className="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6">
+                                <Link
+                                  href={`/metrics/${metric.id}`}
+                                  className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
+                                >
+                                  Edit
+                                  <span className="sr-only">, {metric.name}</span>
+                                </Link>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>

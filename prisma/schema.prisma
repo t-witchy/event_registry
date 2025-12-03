@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Platform {
+  IOS
+  ANDROID
+  WEB
+}
+
+enum EventSource {
+  V1_LOOSE
+  V2_STRONG
+}
+
+model InterfaceGroup {
+  id         Int        @id @default(autoincrement())
+  name       String
+  summary    String?
+  owner      String?
+  interfaces Interface[]
+
+  @@map("interfaceGroups")
+}
+
+model Interface {
+  id               Int                 @id @default(autoincrement())
+  name             String
+  platform         Platform
+  figmaUrl         String?
+  description      String?
+  imageUrl         String?
+  interfaceGroupId Int?
+  interfaceGroup   InterfaceGroup?     @relation(fields: [interfaceGroupId], references: [id])
+  tags             InterfaceTag[]
+  elements         InterfaceElement[]
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  @@map("interfaces")
+}
+
+model Tag {
+  id         Int           @id @default(autoincrement())
+  name       String        @unique
+  color      String?
+  interfaces InterfaceTag[]
+
+  @@map("tags")
+}
+
+model InterfaceTag {
+  id          Int       @id @default(autoincrement())
+  interfaceId Int
+  tagId       Int
+
+  interface Interface @relation(fields: [interfaceId], references: [id])
+  tag       Tag       @relation(fields: [tagId], references: [id])
+
+  @@unique([interfaceId, tagId])
+  @@map("interfaceTags")
+}
+
+model Element {
+  id                Int                @id @default(autoincrement())
+  name              String
+  description       String?
+  interfaceElements InterfaceElement[]
+
+  @@map("elements")
+}
+
+model InterfaceElement {
+  id               Int                    @id @default(autoincrement())
+  interfaceId      Int
+  elementId        Int
+  displayLabel     String?
+  position         Int?
+  notes            String?
+  interface        Interface              @relation(fields: [interfaceId], references: [id])
+  element          Element                @relation(fields: [elementId], references: [id])
+  events           InterfaceElementEvent[]
+
+  @@map("interfaceElements")
+}
+
+model Event {
+  id                    Int                    @id @default(autoincrement())
+  canonicalName         String                 @unique
+  displayName           String
+  source                EventSource
+  interfaceElementEvents InterfaceElementEvent[]
+
+  @@map("events")
+}
+
+model InterfaceElementEvent {
+  id               Int             @id @default(autoincrement())
+  interfaceElementId Int
+  eventId          Int
+  isPrimary        Boolean         @default(false)
+  notes            String?
+
+  interfaceElement InterfaceElement @relation(fields: [interfaceElementId], references: [id])
+  event           Event            @relation(fields: [eventId], references: [id])
+
+  @@unique([interfaceElementId, eventId])
+  @@map("interfaceElementEvents")
+}
+
+

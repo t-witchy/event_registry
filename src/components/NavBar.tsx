@@ -33,7 +33,7 @@ const user = {
 const navigation: NavItem[] = [
   { name: "Events", href: "/" },
   { name: "Metrics", href: "/metrics" },
-  { name: "Projects", href: "#" },
+  { name: "Interfaces", href: "/interfaces" },
   { name: "Calendar", href: "#" },
 ];
 

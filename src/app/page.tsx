@@ -268,12 +268,13 @@ export default function Home() {
                 <div className="mt-8 flow-root">
                   <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                      <table className="relative min-w-full divide-y divide-gray-300 dark:divide-white/15">
-                        <thead>
+                      <div className="overflow-hidden shadow-sm outline-1 outline-black/5 sm:rounded-lg dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
+                        <table className="relative min-w-full divide-y divide-gray-300 dark:divide-white/15">
+                        <thead className="bg-gray-50 dark:bg-gray-800/75">
                           <tr>
                             <th
                               scope="col"
-                              className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white"
+                              className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-6 dark:text-gray-200"
                             >
                               ID
                             </th>
@@ -285,7 +286,12 @@ export default function Home() {
                             </th>
                             <th
                               scope="col"
-                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text:white"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200"
                             >
                               Canonical name
                             </th>
@@ -321,16 +327,16 @@ export default function Home() {
                             </th>
                             <th
                               scope="col"
-                              className="py-3.5 pr-4 pl-3 sm:pr-0"
+                              className="py-3.5 pr-4 pl-3 sm:pr-6"
                             >
                               <span className="sr-only">Edit</span>
                             </th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-200 dark:divide-white/10">
+                        <tbody className="divide-y divide-gray-200 bg-white dark:divide-white/10 dark:bg-gray-800/50">
                           {events.map((event) => (
                             <tr key={event.id}>
-                              <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0 dark:text-white">
+                              <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6 dark:text-white">
                                 {event.id}
                               </td>
                               <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
@@ -354,7 +360,7 @@ export default function Home() {
                               <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
                                 {event.source}
                               </td>
-                              <td className="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
+                              <td className="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6">
                                 <Link
                                   href={`/events/${event.id}`}
                                   className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
@@ -368,7 +374,8 @@ export default function Home() {
                             </tr>
                           ))}
                         </tbody>
-                      </table>
+                        </table>
+                      </div>
                     </div>
                   </div>
                 </div>
