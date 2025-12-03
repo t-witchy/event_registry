@@ -2,13 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { getEvent, updateEvent, type NewEvent } from "@/lib/events";
 
 type Params = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
 export async function GET(_req: NextRequest, { params }: Params) {
-  const id = Number(params.id);
+  const { id } = await params;
+  const numericId = Number(id);
+
+  const event = getEvent(numericId);
   const event = getEvent(id);
 
   if (!event) {
@@ -19,8 +22,10 @@ export async function GET(_req: NextRequest, { params }: Params) {
 }
 
 export async function PUT(req: NextRequest, { params }: Params) {
-  const id = Number(params.id);
-  const existing = getEvent(id);
+  const { id } = await params;
+  const numericId = Number(id);
+
+  const existing = getEvent(numericId);
 
   if (!existing) {
     return NextResponse.json({ error: "Event not found" }, { status: 404 });
@@ -42,7 +47,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
       );
     }
 
-    const updated = updateEvent(id, {
+    const updated = updateEvent(numericId, {
       name: body.name,
       canonicalName: body.canonicalName,
       renamedToName: body.renamedToName ?? null,

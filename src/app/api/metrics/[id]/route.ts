@@ -2,14 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { getMetric, updateMetric, type NewMetric } from "@/lib/metrics";
 
 type Params = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
 export async function GET(_req: NextRequest, { params }: Params) {
-  const id = Number(params.id);
-  const metric = getMetric(id);
+  const { id } = await params;
+  const numericId = Number(id);
+
+  const metric = getMetric(numericId);
 
   if (!metric) {
     return NextResponse.json({ error: "Metric not found" }, { status: 404 });
@@ -19,8 +21,10 @@ export async function GET(_req: NextRequest, { params }: Params) {
 }
 
 export async function PUT(req: NextRequest, { params }: Params) {
-  const id = Number(params.id);
-  const existing = getMetric(id);
+  const { id } = await params;
+  const numericId = Number(id);
+
+  const existing = getMetric(numericId);
 
   if (!existing) {
     return NextResponse.json({ error: "Metric not found" }, { status: 404 });
@@ -55,7 +59,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
       );
     }
 
-    const updated = updateMetric(id, {
+    const updated = updateMetric(numericId, {
       name: body.name,
       description: body.description,
       eventPropertyFilters: body.eventPropertyFilters,
